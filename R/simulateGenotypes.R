@@ -32,6 +32,8 @@
 #' @param founder.haplotypes Optional of haplotypes from which the founder
 #'   population will be sampled. Each haplotype should be a vector of 0s and 1s
 #'   matching the allele for each map distance above.
+#' @param founder.haplotype.count Number of haplotypes in the founder
+#'   population.
 #' @param sample.founder.haplotypes logical. Should the haplotypes be sampled
 #'   from founder.haplotypes with replacement (TRUE) or should each sample
 #'   receive unique haplotypes (FALSE)?
@@ -54,6 +56,7 @@ simulateGenos <- function(ped,
                           xover.min.cM.female = NULL,
                           founder.haplotypes = NULL,
                           sample.founder.haplotypes = FALSE,
+                          founder.haplotype.count = NULL,
                           save.PLINK = TRUE,
                           PLINK.prefix = NULL){
 
