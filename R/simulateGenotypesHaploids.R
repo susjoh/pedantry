@@ -18,14 +18,14 @@ sampleHaploids <- function(haploid.ids, haploid.parent, PLINK.prefix){
     for(i in seq(7, ncol(x), 2)){
       x[change.ids,i+1] <- 0
     }
-    x.pheno[change.ids, "sex"] <- 1
+    x.pheno[change.ids, "sex"] <- 0
   }
 
   if(haploid.parent == "FATHER"){
     for(i in seq(7, ncol(x), 2)){
       x[change.ids,i] <- 0
     }
-    x.pheno[change.ids, "sex"] <- 0
+    x.pheno[change.ids, "sex"] <- 1
   }
 
   write.table(x      , paste0(PLINK.prefix, ".haplo.ped")  , row.names = F, col.names = F, quote = F)
