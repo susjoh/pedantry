@@ -16,14 +16,14 @@ sampleHaploids <- function(haploid.ids, haploid.parent, PLINK.prefix){
 
   if(haploid.parent == "MOTHER"){
     for(i in seq(7, ncol(x), 2)){
-      x[change.ids,i+1] <- x[change.ids,i]
+      x[change.ids,i+1] <- 0
     }
     x.pheno[change.ids, "sex"] <- 1
   }
 
   if(haploid.parent == "FATHER"){
     for(i in seq(7, ncol(x), 2)){
-      x[change.ids,i] <- x[change.ids,i+1]
+      x[change.ids,i] <- 0
     }
     x.pheno[change.ids, "sex"] <- 0
   }
