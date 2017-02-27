@@ -6,9 +6,6 @@
 #' @param haploid.parent parent who produced the haploid offspring, "MOTHER" or "FATHER"
 #' @param PLINK.prefix default is a randomly generated name.
 
-haploid.ids <- 3:10
-haploid.parent <- "MOTHER"
-PLINK.prefix <- "../../Collaboration/Philine Feulner/test"
 
 sampleHaploids <- function(haploid.ids, haploid.parent, PLINK.prefix){
   x       <- read.table(paste0(PLINK.prefix, ".ped"))
