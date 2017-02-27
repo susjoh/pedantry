@@ -96,13 +96,13 @@ simulateGenos <- function(ped,
 
   #~~ Check and format the recombination units
 
-  if( is.null(cM) &  is.null(cM.male) &  is.null(cM.female)) stop   ("No recombination rates specified.")
-  if(!is.null(cM) &  is.null(cM.male) & !is.null(cM.female)) warning("Recombination rate only defined in one sex. Missing sex defaults to cM.")
-  if(!is.null(cM) & !is.null(cM.male) &  is.null(cM.female)) warning("Recombination rate only defined in one sex. Missing sex defaults to cM.")
-  if( is.null(cM) &  is.null(cM.male) & !is.null(cM.female)) stop   ("Recombination rate only defined in one sex. Use cM= ... ")
-  if( is.null(cM) & !is.null(cM.male) &  is.null(cM.female)) stop   ("Recombination rate only defined in one sex. Use cM= ...")
+  if( is.null(cM) &  is.null(cM.male) &  is.null(cM.female)) stop   ("No recombination map specified.")
+  if(!is.null(cM) &  is.null(cM.male) & !is.null(cM.female)) warning("Recombination map only defined in one sex. Missing sex defaults to cM.")
+  if(!is.null(cM) & !is.null(cM.male) &  is.null(cM.female)) warning("Recombination map only defined in one sex. Missing sex defaults to cM.")
+  if( is.null(cM) &  is.null(cM.male) & !is.null(cM.female)) stop   ("Recombination map only defined in one sex. Use cM= ... ")
+  if( is.null(cM) & !is.null(cM.male) &  is.null(cM.female)) stop   ("Recombination map only defined in one sex. Use cM= ...")
 
-  if(!is.null(cM) &  is.null(cM.male) &  is.null(cM.female)) message("Assuming that recombination rates are equal in both sexes.")
+  if(!is.null(cM) &  is.null(cM.male) &  is.null(cM.female)) message("Assuming that recombination maps are the same in both sexes.")
 
   #~~ Use cM if no sex specific information given
 
@@ -154,16 +154,16 @@ simulateGenos <- function(ped,
     message("Founder haplotypes are not provided: will be generated based on allele frequencies.")
     if(!is.null(founder.haplotype.count)){
       message(paste("Number of founder haplotypes set to", founder.haplotype.count))
-    } else (
-      message("Each founder is assigned an individual phenotype. If you wish to change this, please define founder.haplotype.count")
-    )
+    } else {
+      message("Each founder is assigned an individual haplotype. If you wish to change this, please define founder.haplotype.count")
+    }
   }
 
 
-  #~~ RUN THE SIMULATIONS
+  #~~ RUN THE SIMULATION
 
 
-  #~~ Convert to R
+  #~~ Convert to r
 
 
   r.male   <- diff(cM.male/100)
@@ -238,11 +238,10 @@ simulateGenos <- function(ped,
 
   if(is.null(founder.haplotypes)){
 
-
-    if(!is.null(founder.haplotype.count)) founder.haplotype.count <- length(which(transped$Cohort == 0))*2
+    if(is.null(founder.haplotype.count)) founder.haplotype.count <- length(which(transped$Cohort == 0))
 
     founder.haplo.list <- lapply(1:founder.haplotype.count,
-                                 (runif(length(founder.mafs)) < founder.mafs) + 0L)
+                                 function(x) (runif(length(founder.mafs)) < founder.mafs) + 0L)
 
   }
 
@@ -250,17 +249,15 @@ simulateGenos <- function(ped,
 
   founder.haplo.list <- sample(founder.haplo.list)
 
-  if(is.null(sample.founder.haplotypes) & length(founder.haplo.list) >= length(which(transped$Cohort == 0))*2){
+  if(sample.founder.haplotypes == FALSE & length(founder.haplo.list) >= length(which(transped$Cohort == 0))){
 
     counter <- 1
 
     for(i in which(transped$Cohort == 0)){
 
-      if(transped$Parent.ID.SEX[i] == "MOTHER") haplo.list[as.character(transped$Offspring.ID[i])][[1]]$MOTHER <- founder.haplo.list[counter]
+      if(transped$Parent.ID.SEX[i] == "MOTHER") haplo.list[as.character(transped$Offspring.ID[i])][[1]]$MOTHER <- founder.haplo.list[[counter]]
 
-      counter <- counter + 1
-
-      if(transped$Parent.ID.SEX[i] == "FATHER") haplo.list[as.character(transped$Offspring.ID[i])][[1]]$FATHER <- founder.haplo.list[counter]
+      if(transped$Parent.ID.SEX[i] == "FATHER") haplo.list[as.character(transped$Offspring.ID[i])][[1]]$FATHER <- founder.haplo.list[[counter]]
 
       counter <- counter + 1
 
@@ -275,13 +272,9 @@ simulateGenos <- function(ped,
       if(transped$Parent.ID.SEX[i] == "MOTHER") haplo.list[as.character(transped$Offspring.ID[i])][[1]]$MOTHER <- sample(founder.haplo.list, 1)
       if(transped$Parent.ID.SEX[i] == "FATHER") haplo.list[as.character(transped$Offspring.ID[i])][[1]]$FATHER <- sample(founder.haplo.list, 1)
 
-
     }
 
-
   }
-
-
 
   #~~ Sample the non-founder haplotypes by cohort. This loops through cohorts sequentially as
   #   parental haplotypes must exist before sampling.
