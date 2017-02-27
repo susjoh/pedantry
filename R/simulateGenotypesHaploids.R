@@ -35,5 +35,17 @@ sampleHaploids <- function(haploid.ids, haploid.parent, PLINK.prefix){
   write.table(x.map  , paste0(PLINK.prefix, ".haplo.map")  , row.names = F, col.names = F, quote = F)
   write.table(x.pheno, paste0(PLINK.prefix, ".haplo.pheno"), row.names = F, col.names = F, quote = F)
 
+
+  convert.snp.ped(pedfile = paste0(PLINK.prefix, ".haplo.ped"),
+                  mapfile = paste0(PLINK.prefix, ".haplo.map"),
+                  outfile = paste0(PLINK.prefix, ".haplo.genabel"),
+                  traits = 1, strand = "u",  mapHasHeaderLine = F, bcast = F)
+
+
+  genabel.geno <- load.gwaa.data(genofile = paste0(PLINK.prefix, ".haplo.genabel"),
+                                 phenofile = paste0(PLINK.prefix, ".haplo.pheno"))
+
+  genabel.geno
+
 }
 
