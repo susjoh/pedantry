@@ -51,9 +51,9 @@ simulateGenos <- function(ped,
                           map.distances = NULL,
                           error.rate = 1e-4,
                           missing.rate = 0.001,
-                          xover.min.cM = NULL,
-                          xover.min.cM.male = NULL,
-                          xover.min.cM.female = NULL,
+                          xover.min.cM = 0,
+                          xover.min.cM.male = 0,
+                          xover.min.cM.female = 0,
                           founder.haplotypes = NULL,
                           sample.founder.haplotypes = FALSE,
                           founder.haplotype.count = NULL,
@@ -175,6 +175,7 @@ simulateGenos <- function(ped,
 
   #~~ Convert to r
 
+  xover.min.r
   xover.min.r.male   <- xover.min.cM.male/100
   xover.min.r.female <- xover.min.cM.female/100
 
