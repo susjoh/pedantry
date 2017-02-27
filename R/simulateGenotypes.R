@@ -57,7 +57,7 @@ simulateGenos <- function(ped,
                           founder.haplotypes = NULL,
                           sample.founder.haplotypes = FALSE,
                           founder.haplotype.count = NULL,
-                          save.PLINK = TRUE,
+                          save.PLINK = FALSE,
                           PLINK.prefix = NULL){
 
   require(plyr)
