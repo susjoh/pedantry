@@ -175,7 +175,6 @@ simulateGenos <- function(ped,
 
   #~~ Convert to r
 
-  xover.min.r
   xover.min.r.male   <- xover.min.cM.male/100
   xover.min.r.female <- xover.min.cM.female/100
 
