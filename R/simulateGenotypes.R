@@ -147,7 +147,7 @@ simulateGenos <- function(ped,
   # }
   #
 
-  if(is.null(haplo.list)){
+  if(is.null(founder.haplotypes)){
     message("Founder haplotypes are not provided: will be generated based on allele frequencies.")
     if(!is.null(founder.haplotype.count)){
       message(paste("Number of founder haplotypes set to", founder.haplotype.count))
