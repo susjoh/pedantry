@@ -30,7 +30,7 @@ sampleHaploids <- function(haploid.ids, haploid.parent, PLINK.prefix){
 
   write.table(x      , paste0(PLINK.prefix, ".haplo.ped")  , row.names = F, col.names = F, quote = F)
   write.table(x.map  , paste0(PLINK.prefix, ".haplo.map")  , row.names = F, col.names = F, quote = F)
-  write.table(x.pheno, paste0(PLINK.prefix, ".haplo.pheno"), row.names = F, col.names = F, quote = F)
+  write.table(x.pheno, paste0(PLINK.prefix, ".haplo.pheno"), row.names = F, quote = F)
 
 
   convert.snp.ped(pedfile = paste0(PLINK.prefix, ".haplo.ped"),
