@@ -5,6 +5,8 @@
 #' @param haploid.ids vector of IDs to sample haploid genome from
 #' @param haploid.parent parent who produced the haploid offspring, "MOTHER" or "FATHER"
 #' @param PLINK.prefix default is a randomly generated name.
+#' @import GenABEL
+#' @export
 
 
 sampleHaploids <- function(haploid.ids, haploid.parent, PLINK.prefix){

@@ -39,6 +39,7 @@
 #'   receive unique haplotypes (FALSE)?
 #' @param save.PLINK Logical. Keep PLINK file in working directory?
 #' @param PLINK.prefix default is a randomly generated name.
+#' @export
 
 simulateGenos <- function(ped,
                           pedigree.type = "simple",
