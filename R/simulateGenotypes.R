@@ -270,9 +270,8 @@ simulateGenos <- function(ped,
 
     for(i in which(transped$Cohort == 0)){
 
-      if(transped$Parent.ID.SEX[i] == "MOTHER") haplo.list[as.character(transped$Offspring.ID[i])][[1]]$MOTHER <- sample(founder.haplo.list, 1)
-      if(transped$Parent.ID.SEX[i] == "FATHER") haplo.list[as.character(transped$Offspring.ID[i])][[1]]$FATHER <- sample(founder.haplo.list, 1)
-
+      if(transped$Parent.ID.SEX[i] == "MOTHER") haplo.list[as.character(transped$Offspring.ID[i])][[1]]$MOTHER <- sample(founder.haplo.list, 1)[[1]]
+      if(transped$Parent.ID.SEX[i] == "FATHER") haplo.list[as.character(transped$Offspring.ID[i])][[1]]$FATHER <- sample(founder.haplo.list, 1)[[1]]
     }
 
   }
