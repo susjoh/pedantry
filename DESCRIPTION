@@ -1,11 +1,11 @@
 Package: pedantry
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Simulate haplotypes with recombination in pedigrees
 Version: 0.1
 Date: 2016-07-12
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Author: Susan Johnston
+Maintainer: Susan Johnston <Susan.Johnston@ed.ac.uk>
+Description: This package simulates haplotypes and transmits them through complex pedigrees with recombination. Can be used to create a null model of allele and haplotype frequency changes over time.
+License: MIT
 LazyData: TRUE
 RoxygenNote: 6.1.1
