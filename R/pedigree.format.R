@@ -36,14 +36,14 @@ pedigree.format <- function(ped, pedigree.type = "simple"){   # "plink"
 
     for(i in 1:3) ped[which(is.na(ped[,i])),i] <- 0
 
-    if(any(!ped$MOTHER %in% ped$ANIMAL)){
-    ped <- rbind(data.frame(ANIMAL = ped$MOTHER[which(!ped$MOTHER %in% ped$ANIMAL)],
+    if(any(!ped$MOTHER %in% c(0, ped$ANIMAL))){
+    ped <- rbind(data.frame(ANIMAL = ped$MOTHER[which(!ped$MOTHER %in% c(0, ped$ANIMAL))],
                             MOTHER = 0, FATHER = 0),
                  ped)
     }
 
-    if(any(!ped$FATHER %in% ped$ANIMAL)){
-      ped <- rbind(data.frame(ANIMAL = ped$FATHER[which(!ped$FATHER %in% ped$ANIMAL)],
+    if(any(!ped$FATHER %in% c(0, ped$ANIMAL))){
+      ped <- rbind(data.frame(ANIMAL = ped$FATHER[which(!ped$FATHER %in% c(0, ped$ANIMAL))],
                             MOTHER = 0, FATHER = 0),
                    ped)
     }

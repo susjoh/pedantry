@@ -1,7 +1,7 @@
-#' Simulate recombination events in R
+#' Simulate haplotypes in R
 #'
 #' This function simulates genotypes within a pedigree, based on centiMorgan map
-#' distances. Outputs genotypes as PLINK ped format
+#' distances. Outputs genotypes as PLINK format.
 #' @param ped data.frame of pedigree in "simple" format (Three columns for
 #'   ANIMAL, MOTHER and FATHER) or in "plink" format (Five to Six columns for
 #'   FAMILY, ANIMAL, FATHER, MOTHER, SEX and Phenotype, where the phenotype
@@ -44,7 +44,7 @@
 #' @import reshape2
 #' @export
 
-simulateGenos <- function(ped,
+simulateKnownHaplotypes <- function(ped,
                           pedigree.type = "simple",
                           cM = NULL,
                           cM.male = NULL,
@@ -66,26 +66,22 @@ simulateGenos <- function(ped,
                           return.data = TRUE){
 
 
-  # ped <- read.table("data/pedigree_20130920.txt", header = T)
+  # load("haplotemp.RData", verbose = T)
+
   # pedigree.type = "simple"
   # cM = c(0, 5, 23, 34, 40, 45, 67, 71, 83, 95)
   # cM.male = NULL
   # cM.female = NULL
-  # founder.mafs = NULL
-  # chromosome.ids = NULL
   # snp.names = NULL
-  # map.distances = NULL
   # error.rate = 1e-4
   # missing.rate = 0.001
   # xover.min.cM = 0
   # xover.min.cM.male = 0
   # xover.min.cM.female = 0
-  # founder.haplotypes = NULL
+  # founder.haplotypes.list = founderhaplos
   # sample.founder.haplotypes = FALSE
-  # founder.haplotype.count = NULL
   # save.PLINK = FALSE
   # PLINK.prefix = NULL
-
 
   require(dplyr)
   require(reshape2)
@@ -107,7 +103,7 @@ simulateGenos <- function(ped,
   cohorts <- data.frame(ANIMAL = ped[,1],
                         Cohort = kindepth(ped[,1], ped[,3], ped[,2]))
 
-  suppressMessages(transped <- join(transped, cohorts))
+  suppressMessages(transped <- left_join(transped, cohorts))
 
   #~~ Redefine columns
 
@@ -117,7 +113,6 @@ simulateGenos <- function(ped,
   #~~ Recode founder gametes to 0 e.g. if one parent is unknown
 
   transped$Cohort[which(transped$Parent.ID == 0)] <- 0
-
 
   #~~ Check and format the recombination units
 
@@ -154,35 +149,9 @@ simulateGenos <- function(ped,
   #~~ Tidy up the SNP names and founder MAFs etc. if not defined  #X#X#X#X
 
   if(is.null(snp.names))  snp.names <- paste0("SNP", 1:length(cM.male))
-  if(is.null(founder.mafs) & is.null(founder.haplotypes)){
-    message("Founder MAFs have not been defined - assuming MAF = 0.5")
-    founder.mafs <- rep(0.5, times = length(cM.male))
-  }
-  if(is.null(map.distances)){
-    message("Base pair distances have not been defined - will assume 1cM = 1Mb")
-    map.distances <- as.integer(cM.female*1e6)
-  }
 
-  if(is.null(chromosome.ids)){
-    message("Assuming all markers are on the same chromosome. Output will be Chromosome 1.")
-    chromosome.ids <- rep(1, length(cM.female))
-  }
-
-  #X#X#X#X
-  # if(!is.null(chromosome.ids)){
-  #
-  #  This needs to be edited to account for wrongly ordered IDs and recombination
-  #   fractions between chromosomes.
-  # }
-  #
-
-  if(is.null(founder.haplotypes)){
-    message("Founder haplotypes are not provided: will be generated based on allele frequencies.")
-    if(!is.null(founder.haplotype.count)){
-      message(paste("Number of founder haplotypes set to", founder.haplotype.count))
-    } else {
-      message("Each founder is assigned an individual haplotype. If you wish to change this, please define founder.haplotype.count")
-    }
+  if(is.null(founder.haplotypes.list)){
+    message("Founder haplotypes are not provided. Please use simulateGenotypes()")
   }
 
 
@@ -203,7 +172,6 @@ simulateGenos <- function(ped,
 
   xover.min.r.male   <- xover.min.cM.male/100
   xover.min.r.female <- xover.min.cM.female/100
-
 
   #~~ Create a recombination template by sampling the probability of a crossover within an interval
 
@@ -249,10 +217,6 @@ simulateGenos <- function(ped,
 
   transped$RecombCount <- unlist(lapply(template.list, length))
   transped$RecombCount[which(transped$Cohort == 0)] <- NA
-
-  #~~ Create founder haplotypes by sampling allele frequencies
-
-  head(transped)
 
   #~~ Create a list to sample haplotypes
 
@@ -346,6 +310,8 @@ simulateGenos <- function(ped,
   #~~ Condense haplotypes into genotypes
 
   genotype.list <- list()
+
+
 
   if(phased.output == TRUE){
     message("Genotypes are phased - Maternal, Paternal")
@@ -454,4 +420,5 @@ simulateGenos <- function(ped,
 
   if(return.data) list("ped" = x, "map" = mapobj)
 }
+
 
