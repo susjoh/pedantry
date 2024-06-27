@@ -63,7 +63,8 @@ simulateKnownHaplotypes <- function(ped,
                           founder.haplotype.count = NULL,
                           save.PLINK = FALSE,
                           PLINK.prefix = NULL,
-                          return.data = TRUE){
+                          return.data = TRUE,
+                          numeric.snps = T){
 
 
   # load("haplotemp.RData", verbose = T)
@@ -78,7 +79,7 @@ simulateKnownHaplotypes <- function(ped,
   # xover.min.cM = 0
   # xover.min.cM.male = 0
   # xover.min.cM.female = 0
-  # founder.haplotypes.list = founderhaplos
+  # founder.haplotypes = founderhaplos
   # sample.founder.haplotypes = FALSE
   # save.PLINK = FALSE
   # PLINK.prefix = NULL
@@ -150,8 +151,15 @@ simulateKnownHaplotypes <- function(ped,
 
   if(is.null(snp.names))  snp.names <- paste0("SNP", 1:length(cM.male))
 
-  if(is.null(founder.haplotypes.list)){
+  if(is.null(founder.haplotypes)){
     message("Founder haplotypes are not provided. Please use simulateGenotypes()")
+  }
+
+  #~~ can't tolerate non-numeric markers and error rates for the moment
+
+  if(!numeric.snps & error.rate > 0){
+    message("Cannot specify error for non-numeric SNPs at the moment. Errors have been set to zero.")
+    error.rate = 0
   }
 
 
@@ -237,7 +245,7 @@ simulateKnownHaplotypes <- function(ped,
 
   #~~ Assign haplotypes to the founder generation
 
-  founder.haplo.list <- sample(founder.haplo.list)
+  founder.haplo.list <- sample(founder.haplotypes)
 
   if(sample.founder.haplotypes == FALSE & length(founder.haplo.list) >= length(which(transped$Cohort == 0))){
 
@@ -345,7 +353,7 @@ simulateKnownHaplotypes <- function(ped,
 
   colnames(x) <- rep(snp.names, each = 2)
 
-  x <- x + 1
+  if(numeric.snps) x <- x + 1
 
   #~~ Create errors in the dataset
 
@@ -418,7 +426,7 @@ simulateKnownHaplotypes <- function(ped,
     message(paste0("PLINK files saved with the prefix ", tempfile))
   }
 
-  if(return.data) list("ped" = x, "map" = mapobj)
+  if(return.data) list("ped" = x, "map" = mapobj, cos = "template.list")
 }
 
 
