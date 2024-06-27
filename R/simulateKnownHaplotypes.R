@@ -426,7 +426,7 @@ simulateKnownHaplotypes <- function(ped,
     message(paste0("PLINK files saved with the prefix ", tempfile))
   }
 
-  if(return.data) list("ped" = x, "map" = mapobj, cos = "template.list")
+  if(return.data) list("ped" = x, "map" = mapobj, cos = template.list)
 }
 
 
